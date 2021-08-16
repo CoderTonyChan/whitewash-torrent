@@ -39,7 +39,7 @@
               <span class="input-group-text">新文件名</span>
             </div>
             <!-- <input type="text" class="form-control" v-model="filename"> -->
-            <span>{{ filename }}</span>
+            <span class="form-control">{{ filename }}</span>
           </div>
         </div>
       </div>
@@ -76,11 +76,11 @@
         </span>
       </div>
       <!-- <input type="text" class="form-control" v-model="file.name"> -->
-      <span>{{ file.name }}</span>
-      <div class="input-group-append">
+      <span class="form-control">{{ file.name }} {{ convertLength }}</span>
+      <!-- <div class="input-group-append">
         <span class="input-group-text" style="min-width:6.2em">{{ convertLength }}</span>
         <button class="btn btn-danger del" type="button" v-if="file.id !== 1" @click="deleteFile"></button>
-      </div>
+      </div> -->
     </div>
     <div class="collapse show" :id="'collapse-'+file.id" v-if="file.children">
       <div class="card card-body border-top-0 pt-0 pl-2 pr-2 pb-2">
@@ -91,7 +91,7 @@
     </div>
   </div>
 </script>
-<script src="../dist/bundle.min.js"></script>
+<script src="./asset/bundle.min.js"></script>
 <script>
   document.querySelector('#year').innerText = new Date().getFullYear()
 </script>
