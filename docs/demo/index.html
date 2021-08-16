@@ -39,7 +39,7 @@
               <span class="input-group-text">新文件名</span>
             </div>
             <!-- <input type="text" class="form-control" v-model="filename"> -->
-            <span>{{ filename }}</span>
+            <span class="form-control">{{ filename }}</span>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
         </span>
       </div>
       <!-- <input type="text" class="form-control" v-model="file.name"> -->
-      <span>{{ file.name }}</span>
+      <span class="form-control">{{ file.name }}</span>
       <div class="input-group-append">
         <span class="input-group-text" style="min-width:6.2em">{{ convertLength }}</span>
         <button class="btn btn-danger del" type="button" v-if="file.id !== 1" @click="deleteFile"></button>
