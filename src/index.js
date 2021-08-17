@@ -13,10 +13,10 @@ Vue.component('item', {
     template: '#item-template',
     props: ['file'],
     computed: {
-        convertLength: function() {
+        convertLength: function () {
             return convertLength(this.file.length)
         },
-        checked: function() {
+        checked: function () {
             if (!this.file.parent) {
                 return true
             } else if (!this.file.children) {
@@ -31,13 +31,78 @@ Vue.component('item', {
         },
     },
     methods: {
-        deleteFile: function() {
+        deleteFile: function () {
             deleteFile(this.file)
         },
-        buttonClick: function(file) {
+        buttonClick: function (file) {
             console.log(file)
+
+            // title
+            var h5 = document.createElement("h5")
+            document.getElementById("table").appendChild(h5);
+            h5.innerHTML = file.originName;
+
+            var table = document.createElement("table"), row, cellA, cellB, temp;
+            document.getElementById("table").appendChild(table);
+
+
+            // title
+            temp = document.createElement("caption");
+            temp.innerHTML = file.originName;
+            table.appendChild(temp);
+            // 先插入表头
+            row = document.createElement("tr");
+            cellA = document.createElement("td");
+            cellB = document.createElement("td");
+            cellA.innerHTML = `名称`;
+            cellB.innerHTML = `大小`;
+            table.appendChild(row);
+            row.appendChild(cellA);
+            row.appendChild(cellB);
+
+            // 先插入目录
+            row = document.createElement("tr");
+            cellA = document.createElement("td");
+            cellB = document.createElement("td");
+            cellA.innerHTML = file.originName;
+            cellB.innerHTML = `${convertLength(file.length)}`;
+            table.appendChild(row);
+            row.appendChild(cellA);
+            row.appendChild(cellB);
+
+
+            var data = '{"Name":"John Doe","Email":"john@doe.com","Gender":"male","Colors":["red","green","blue"],"Pet":{"Name":"Roger Doe","Species":"Canis lupus familiaris"}}';
+            for (let key in file.children) {
+                // (C2) ROWS & CELLS
+                row = document.createElement("tr");
+                cellA = document.createElement("td");
+                cellB = document.createElement("td");
+
+                // // (C3) KEY & VALUE
+                // cellA.innerHTML = key;
+                // // COLORS FIELD
+                // if (key == "Colors") {
+                //     cellB.innerHTML = file.children[key].join(", ");
+                // }
+                // // PET FIELD
+                // else if (key == "Pet") {
+                //     cellB.innerHTML = `<div>Name: ${file.children[key]['Name']}</div><div>Species: ${file.children[key]['Species']}</div>`;
+                // }
+                // // OTHER FIELDS
+                // else {
+                //     cellB.innerHTML = file.children[key];
+                // }
+                cellA.innerHTML = file.children[key].originName;
+                cellB.innerHTML = `${convertLength(file.children[key].length)}`;
+
+
+                // (C4) ATTACH ROW & CELLS
+                table.appendChild(row);
+                row.appendChild(cellA);
+                row.appendChild(cellB);
+            }
         },
-        changeChecked: function() {
+        changeChecked: function () {
             let checked = this.checked
             for (let i in this.file.children) {
                 this.file.children[i].checked = !checked
@@ -53,13 +118,13 @@ var app = new Vue({
         filename: '',  // 种子文件名
     },
     methods: {
-        upload: function() {
+        upload: function () {
             fileManager.upload((data, filename) => {
                 decodeFile(data)
                 this.filename = filename
             })
         },
-        save: function() {
+        save: function () {
             if (!btData) {
                 alert('未打开种子文件')
                 return
@@ -68,16 +133,16 @@ var app = new Vue({
             let result = bencode.encode(btData)
             fileManager.download(result, this.filename)
         },
-        checkAll: function() {
+        checkAll: function () {
             check(this.files)
         },
         invertCheck: function () {
             check(this.files, true)
         },
-        deleteChecked: function() {
+        deleteChecked: function () {
             let delList = []
             getCheckedList(this.files, delList)
-            for (let i = delList.length-1; i >= 0; i--) {
+            for (let i = delList.length - 1; i >= 0; i--) {
                 deleteFile(delList[i])
             }
         },
@@ -86,7 +151,7 @@ var app = new Vue({
 
 // 调试用
 window.app = app
-window.btData = function() {
+window.btData = function () {
     return btData
 }
 
@@ -129,7 +194,7 @@ function convertToFileTree(bt) {
         index++
         let pathList = file['path.utf-8'] || file['path']          // 目录列表, 优先使用UTF-8编码
         let dir = getDir(root, pathList.slice(0, -1))              // 获取文件所属路径, 去除path的最后一项
-        let fileName = decoder.decode(pathList[pathList.length-1]) // path的最后一项是文件名
+        let fileName = decoder.decode(pathList[pathList.length - 1]) // path的最后一项是文件名
         if (isPaddingFile(fileName)) {
             return  // 跳过占位文件
         }
@@ -178,7 +243,7 @@ function getDir(root, pathList) {
                 btIndex: [],                  // btData.info.files[]的索引, 在目录中是数组形式
                 index: root.children.length,  // 文件|目录在其父目录中的索引
             })
-            root.pathName.set(pathName, root.children.length-1)
+            root.pathName.set(pathName, root.children.length - 1)
         }
         root = root.children[root.pathName.get(pathName)]  // 进入子目录
     })
@@ -190,7 +255,7 @@ function getDir(root, pathList) {
  * @param {Object} root 要修改的对象
  * @param {Boolean} invert 是否反选
  */
-function check (root, invert=false) {
+function check(root, invert = false) {
     if (root.children) {
         root.children.forEach((child) => check(child, invert))
     } else if (root.checked !== undefined) {
@@ -216,8 +281,8 @@ function isPaddingFile(filename) {
  * @param {String} filename 文件名
  * @param {Number} id 
  */
-function convertToPaddingFile(filename, id=0) {
-    return '_____padding_file_'+id+'_'+filename+'____'
+function convertToPaddingFile(filename, id = 0) {
+    return '_____padding_file_' + id + '_' + filename + '____'
 }
 
 /**
@@ -231,7 +296,7 @@ function convertLength(length) {
     for (; length >= 1024 && i < suffix.length; i++) {
         length /= 1024
     }
-    length = Math.round(length*100) / 100  // 保留两位小数
+    length = Math.round(length * 100) / 100  // 保留两位小数
     length = length + ' ' + suffix[i]      // 添加后缀
     return length
 }
@@ -259,7 +324,7 @@ function deleteFile(file) {
         // 删除的是文件
         let arr = btData.info.files[file.btIndex]
         arr = arr['path.utf-8'] || arr['path']
-        arr.splice(0, arr.length-1)
+        arr.splice(0, arr.length - 1)
         arr[0] = convertToPaddingFile('deleted_by_sdjdd')
         let temp = file, length = file.length
         while (temp.parent) {
@@ -270,7 +335,7 @@ function deleteFile(file) {
         // 删除的是非空目录
         while (file.children.length > 0) {
             // 倒序删除以避免不必要的索引更新
-            deleteFile(file.children[file.children.length-1])
+            deleteFile(file.children[file.children.length - 1])
         }
         return
     }
@@ -284,7 +349,7 @@ function deleteFile(file) {
     }
     // 更新兄弟文件的索引
     for (; pIndex < parent.children.length; pIndex++) {
-        parent.children[pIndex].index -= 1 
+        parent.children[pIndex].index -= 1
     }
 }
 
@@ -338,7 +403,7 @@ function saveChange(root) {
  */
 function renameFile(file) {
     let arr = btData.info.files[file.btIndex]['path.utf-8'] || btData.info.files[file.btIndex]['path']
-    arr[arr.length-1] = file.name
+    arr[arr.length - 1] = file.name
 }
 
 /**
