@@ -68,7 +68,7 @@
         <button class="btn btn-outline-secondary dir" type="button" 
                 data-toggle="collapse" 
                 :data-target="'#collapse-'+file.id" 
-                v-if="file.children" @click="buttonClick"></button>
+                v-if="file.children" @click="buttonClick(file)"></button>
         <span class="input-group-text" v-else><i class="file"></i></span>
         <span class="input-group-text" v-if="file.id !== 1">
           <input type="checkbox" v-if="file.children" :checked="checked" @click.prevent="changeChecked">

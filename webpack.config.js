@@ -4,11 +4,11 @@ const config = {
     mode: 'production',
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'docs/asset'),
         filename: 'bundle.min.js',
     },
     devServer: {
-        contentBase: path.resolve(__dirname, 'demo'),
+        contentBase: path.resolve(__dirname, 'docs'),
         publicPath: '/dist',
     },
     module: {
