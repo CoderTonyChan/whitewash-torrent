@@ -1,3 +1,3 @@
-# A WEB APP THAT YOU KNOW WHAT IT IS
+# torrent-tool
 
-[START UP](https://blog.tonystudio.ml/whitewash-torrent/)
+[WebApp](https://blog.tonystudio.ml/whitewash-torrent/)
