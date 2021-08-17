@@ -34,6 +34,9 @@ Vue.component('item', {
         deleteFile: function() {
             deleteFile(this.file)
         },
+        buttonClick: function(file) {
+            console.log(file)
+        },
         changeChecked: function() {
             let checked = this.checked
             for (let i in this.file.children) {
