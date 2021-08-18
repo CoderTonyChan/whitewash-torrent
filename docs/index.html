@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
+
 <head>
   <meta charset="UTF-8">
   <title>BT-Manager</title>
@@ -9,7 +10,10 @@
   <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="./asset/css/style.css">
+  <!-- json-stringify-safe -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/json-stringify-safe@5.0.1/stringify.min.js"></script> -->
 </head>
+
 <body>
   <div class="container mt-4">
     <div>
@@ -51,14 +55,14 @@
     </div>
     <div class="d-flex justify-content-center guide">
       <div class="mt-5 mb-5" style="display:inline-block" v-show="!files">
-          <div style="font-size:1.5rem">开始使用：</div>
-          <ol class="mt-1" style="font-size:1.2rem">
-            <li>点击 <span class="font-weight-bold">打开种子</span> 编辑要修改的 BitTorrent 种子文件</li>
-            <li>点击文件名右侧的 <span class="text-danger font-weight-bold">红色</span> 按钮删除不需要的文件</li>
-            <li>重新编辑敏感文件的文件名</li>
-            <li>点击 <span class="font-weight-bold">保存更改</span> 下载更改后的种子</li>
-            <li>解析种子结构 点击文件夹会生成表格</li>
-          </ol>
+        <div style="font-size:1.5rem">开始使用：</div>
+        <ol class="mt-1" style="font-size:1.2rem">
+          <li>点击 <span class="font-weight-bold">打开种子</span> 编辑要修改的 BitTorrent 种子文件</li>
+          <li>点击文件名右侧的 <span class="text-danger font-weight-bold">红色</span> 按钮删除不需要的文件</li>
+          <li>重新编辑敏感文件的文件名</li>
+          <li>点击 <span class="font-weight-bold">保存更改</span> 下载更改后的种子</li>
+          <li>解析种子结构 点击文件夹会生成表格</li>
+        </ol>
       </div>
     </div>
     <div id="table"></div>
@@ -66,7 +70,7 @@
       Mod By Tony Created By sdjdd @ <span id="year">2018</span>
     </footer>
   </div>
-<script id="item-template" type="text/x-template">
+  <script id="item-template" type="text/x-template">
   <div>
     <div class="input-group input-group-sm mt-2">
       <div class="input-group-prepend">
@@ -96,10 +100,29 @@
     </div>
   </div>
 </script>
-<script src="./asset/bundle.min.js"></script>
-<script>
-  console.log(`171549`)
-  document.querySelector('#year').innerText = new Date().getFullYear()
-</script>
+  <script src="./asset/bundle.min.js"></script>
+  <script>
+    console.log(`171549`)
+    document.querySelector('#year').innerText = new Date().getFullYear()
+
+    const getCircularReplacer = () => {
+      const seen = new WeakSet();
+      return (key, value) => {
+        if (typeof value === "object" && value !== null) {
+          if (seen.has(value)) {
+            return;
+          }
+          seen.add(value);
+        }
+        return value;
+      };
+    }
+    const safeStringify = (file) => {
+      const json = JSON.stringify(file, getCircularReplacer())
+      console.log(json)
+      return json
+    }
+  </script>
 </body>
+
 </html>
